@@ -41,11 +41,11 @@ TODO: Think about handling the data addressing, e.g. literals in the data sectio
 
 ### Registers
 
-res - 32-bit register - stores the result of the last operation
-acc - 32-bit register - accumulator for adding, subtracting, etc
-flags - 8-bit register - bits are set based on result of last operation, e.g. if the result was zero, if the result was less than zero, etc.
-sp - 16-bit register - stores the stack pointer
-pc - 16-bit register - stores the program counter
+res - 32-bit register - stores the result of the last operation  
+acc - 32-bit register - accumulator for adding, subtracting, etc.  
+flags - 8-bit register - bits are set based on result of last operation, e.g. if the result was zero, if the result was less than zero, etc.  
+sp - 16-bit register - stores the stack pointer  
+pc - 16-bit register - stores the program counter  
 
 ### Stack
 
