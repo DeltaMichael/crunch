@@ -2,10 +2,10 @@
 
 ## Binary file format
 
-OPCODE - 8 bits
-ADDRESS - 16 bits
-VALUE - 32 bits
-MAGIC - 32 bits - FEFA FAFO
+OPCODE - 8 bits  
+ADDRESS - 16 bits  
+VALUE - 32 bits  
+MAGIC - 32 bits - FEFA FAFO  
 
 ```
 <MAGIC><DATA SECTION><MAGIC><CODE>
