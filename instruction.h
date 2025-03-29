@@ -10,6 +10,7 @@ typedef struct {
 } INSTRUCTION;
 
 INSTRUCTION* instr_init(uint8_t opcode, uint32_t address1, uint32_t address2);
+INSTRUCTION* instr_from_bytes(uint8_t* bytes, int length);
 void instr_free(INSTRUCTION* instr);
 
 #endif

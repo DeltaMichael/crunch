@@ -50,10 +50,35 @@ uint32_t stack_pop32(STACK* stack) {
 }
 
 uint32_t stack_get32(STACK* stack, uint16_t address) {
+	if(address == 0) {
+		return 0;
+	}
+	// stack->pointer--;
+	uint16_t local_address = address - STACK_OFFSET;
+	uint32_t out = 0;
+	for(int i = 3; i >= 1; i--) {
+		out |= stack->data[local_address - i];
+		out = out << 8;
+	}
+	out |= stack->data[local_address];
+	// stack->pointer -= 3;
+	return out;
+
 	return 0;
 }
 
 void stack_write32(STACK* stack, uint16_t address, uint32_t value) {
+	// TODO: check for overflow
+	uint32_t mask = 0xFF000000;
+	uint8_t offset = 24;
+	uint16_t local_address = address - STACK_OFFSET;
+	while(mask) {
+		uint8_t result = (value & mask) >> offset;
+		mask >>= 8;
+		offset -= 8;
+		stack->data[local_address] = result;
+		local_address++;
+	}
 }
 
 void stack_print(STACK* stack) {
