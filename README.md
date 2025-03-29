@@ -6,9 +6,10 @@ OPCODE - 8 bits
 ADDRESS - 16 bits  
 VALUE - 32 bits  
 MAGIC - 32 bits - FEFA FAFO  
+DATA SECTIN LENGTH - 16 bits
 
 ```
-<MAGIC><DATA SECTION><MAGIC><CODE>
+<MAGIC><DATA SECTION LENGTH><DATA SECTION><CODE>
 
 <DATA>
 <VALUE>
@@ -60,3 +61,16 @@ ADD - pops two values off the stack, adds them and pushes the result on the stac
 ADD $(SP - 4) - add value at address SP - 4 to ACC  
 ADD ACC, $(SP - 4) - same as above  
 ADD $(SP - 4), $(SP - 8) - add value at address SP - 8 to value in address SP - 4 and store the value in at address SP - 4  
+
+Instructions
+```
+ADD
+SUB
+DIV
+MUL
+PUSH
+POP
+JNZ
+JZ
+JMP
+```
