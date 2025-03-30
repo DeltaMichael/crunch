@@ -2,7 +2,8 @@
 #define STACK_H
 
 #define STACK_OFFSET 0x8100
-#define STACK_SIZE 0xFFFF
+#define STACK_SIZE 0xE040
+#define DATA_OFFSET 0xE040
 
 #include <stdint.h>
 

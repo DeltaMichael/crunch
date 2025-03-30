@@ -19,7 +19,7 @@ MACHINE* machine_init();
 void machine_free(MACHINE* machine);
 
 void machine_exec(MACHINE* machine, const char* program);
-INSTRUCTION* machine_read_instruction(MACHINE* machine, FILE* program);
+int machine_read_instruction(MACHINE* machine, FILE* program, INSTRUCTION* instr);
 void machine_exec_instr(MACHINE* machine, INSTRUCTION* instr);
 
 #endif

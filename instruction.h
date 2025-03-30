@@ -3,6 +3,22 @@
 
 #include <stdint.h>
 
+enum OPCODE {
+	ADD = 2,
+	SUB,
+	DIV,
+	MUL,
+	PUSH,
+	POP,
+	PRINT,
+	READ,
+	JZ,
+	JNZ,
+	JLZ,
+	JGZ,
+	JMP
+};
+
 typedef struct {
 	uint8_t opcode;
 	uint16_t address1;

@@ -53,6 +53,7 @@ void machine_exec(MACHINE* machine, const char* program) {
 	FILE* bin = fopen(program, "rb");
 	uint32_t magic;
 	uint16_t data_length;
+	uint16_t program_length;
 	uint8_t byte;
 
 	// read magic number
@@ -71,13 +72,55 @@ void machine_exec(MACHINE* machine, const char* program) {
 		printf("%02X ", byte);
 	}
 	printf("\n");
+	// read program section length
+	read_2_bytes(bin, &program_length);
+	printf("PROGRAM_LENGTH: %04X\n", program_length);
+
+	INSTRUCTION* instr = malloc(sizeof(INSTRUCTION));
+
+	while(program_length > 0) {
+		printf("LENGTH: %d\n", program_length);
+		program_length -= machine_read_instruction(machine, bin, instr);
+		machine_exec_instr(machine, instr);
+	}
+
+	printf("\n");
 }
 
-INSTRUCTION* machine_read_instruction(MACHINE* machine, FILE* program) {
-	return NULL;
+int machine_read_instruction(MACHINE* machine, FILE* bin, INSTRUCTION* instr) {
+	uint8_t opcode = 0;
+	uint16_t address1 = 0;
+	uint16_t address2 = 0;
+	read_1_byte(bin, &opcode);
+
+	read_2_bytes(bin, &address1);
+	if(address1 < STACK_OFFSET) {
+		fseek(bin, -2, SEEK_CUR);
+		instr->opcode = opcode;
+		instr->address1 = 0;
+		instr->address2 = 0;
+		return 1;
+	}
+
+	read_2_bytes(bin, &address2);
+
+	if(address2 < STACK_OFFSET) {
+		fseek(bin, -2, SEEK_CUR);
+		instr->opcode = opcode;
+		instr->address1 = address1;
+		instr->address2 = 0;
+		return 3;
+	}
+
+	instr->opcode = opcode;
+	instr->address1 = address1;
+	instr->address2 = address2;
+	return 5;
 }
 
 void machine_exec_instr(MACHINE* machine, INSTRUCTION* instr) {
-
+	printf("OPCODE: %02X\n", instr->opcode);
+	printf("ADDR1: %04X\n", instr->address1);
+	printf("ADDR2: %04X\n", instr->address2);
 }
 

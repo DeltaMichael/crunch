@@ -2,14 +2,16 @@
 
 ## Binary file format
 
-OPCODE - 8 bits  
-ADDRESS - 16 bits  
-VALUE - 32 bits  
-MAGIC - 32 bits - FEFA FAFO  
+OPCODE - 8 bits
+ADDRESS - 16 bits
+VALUE - 32 bits
+MAGIC - 32 bits - FEFA FAFC
 DATA SECTIN LENGTH - 16 bits
+CODE LENGTH - 16 bits
+TRAILING ZERO - 8 bits
 
 ```
-<MAGIC><DATA SECTION LENGTH><DATA SECTION><CODE>
+<MAGIC><DATA SECTION LENGTH><DATA SECTION><CODE LENGTH><CODE><TRAILING ZERO>
 
 <DATA>
 <VALUE>
@@ -42,25 +44,25 @@ TODO: Think about handling the data addressing, e.g. literals in the data sectio
 
 ### Registers
 
-res - 32-bit register - stores the result of the last operation  
-acc - 32-bit register - accumulator for adding, subtracting, etc.  
-flags - 8-bit register - bits are set based on result of last operation, e.g. if the result was zero, if the result was less than zero, etc.  
-sp - 16-bit register - stores the stack pointer  
-pc - 16-bit register - stores the program counter  
+res - 32-bit register - stores the result of the last operation
+acc - 32-bit register - accumulator for adding, subtracting, etc.
+flags - 8-bit register - bits are set based on result of last operation, e.g. if the result was zero, if the result was less than zero, etc.
+sp - 16-bit register - stores the stack pointer
+pc - 16-bit register - stores the program counter
 
 ### Stack
 
-Mainly used to store variables. Each frame is 32-bits wide. To keep it simple and avoid alignment issues, 
+Mainly used to store variables. Each frame is 32-bits wide. To keep it simple and avoid alignment issues,
 all numbers are 32 bits wide. This may change in the future.
 
 ### Instruction set
 
 Instructions can have zero, one or two arguments. The same instruction can have a variable amount of arguments, e.g.
 
-ADD - pops two values off the stack, adds them and pushes the result on the stack  
-ADD $(SP - 4) - add value at address SP - 4 to ACC  
-ADD ACC, $(SP - 4) - same as above  
-ADD $(SP - 4), $(SP - 8) - add value at address SP - 8 to value in address SP - 4 and store the value in at address SP - 4  
+ADD - pops two values off the stack, adds them and pushes the result on the stack
+ADD $(SP - 4) - add value at address SP - 4 to ACC
+ADD ACC, $(SP - 4) - same as above
+ADD $(SP - 4), $(SP - 8) - add value at address SP - 8 to value in address SP - 4 and store the value in at address SP - 4
 
 Instructions
 ```
