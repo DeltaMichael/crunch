@@ -5,10 +5,10 @@
 
 enum OPCODE {
 	ADD = 2,
-	SUB,
-	DIV,
-	MUL,
-	PUSH,
+	SUB = 3,
+	DIV = 4,
+	MUL = 5,
+	PUSH = 6,
 	POP,
 	PRINT,
 	READ,

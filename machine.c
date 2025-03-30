@@ -31,7 +31,7 @@ void read_1_byte(FILE* binary, uint8_t* dest) {
 MACHINE* machine_init() {
 	MACHINE* machine = malloc(sizeof(MACHINE));
 	machine->stack = stack_init();
-	machine->sp = 0;
+	machine->sp = &machine->stack->pointer;
 	machine->pc = 0;
 	machine->res = 0;
 	machine->acc = 0;
@@ -79,11 +79,10 @@ void machine_exec(MACHINE* machine, const char* program) {
 	INSTRUCTION* instr = malloc(sizeof(INSTRUCTION));
 
 	while(program_length > 0) {
-		printf("LENGTH: %d\n", program_length);
 		program_length -= machine_read_instruction(machine, bin, instr);
-		machine_exec_instr(machine, instr);
+		machine_exec_instr(machine, bin, instr);
+		printf("SP: %d\n", *machine->sp);
 	}
-
 	printf("\n");
 }
 
@@ -118,9 +117,35 @@ int machine_read_instruction(MACHINE* machine, FILE* bin, INSTRUCTION* instr) {
 	return 5;
 }
 
-void machine_exec_instr(MACHINE* machine, INSTRUCTION* instr) {
-	printf("OPCODE: %02X\n", instr->opcode);
-	printf("ADDR1: %04X\n", instr->address1);
-	printf("ADDR2: %04X\n", instr->address2);
+void machine_exec_instr(MACHINE* machine, FILE* bin, INSTRUCTION* instr) {
+	printf("OPCODE: %02X ADDR1: %04X ADDR2: %04X\n", instr->opcode, instr->address1, instr->address2);
+	switch (instr->opcode) {
+		case PUSH:
+			if(instr->address1 != 0 && instr->address1 >= DATA_OFFSET) {
+				uint32_t data = machine_read_uint32_data(machine, bin, instr->address1);
+				printf("NUM: %08X\n", data);
+				stack_push(machine->stack, data);
+			} else if (instr->address1 != 0 && instr->address1 >= STACK_OFFSET) {
+
+			} else {
+				// TODO: handle error
+			}
+			break;
+		case ADD:
+			uint32_t first = stack_pop32(machine->stack);
+			uint32_t second = stack_pop32(machine->stack);
+			stack_push(machine->stack, first + second);
+			break;
+	}
+}
+
+uint32_t machine_read_uint32_data(MACHINE* machine, FILE* bin, uint16_t address) {
+	uint32_t result = 0;
+	uint16_t file_offset = address - DATA_OFFSET + DATA_FILE_OFFSET;
+	long position = ftell(bin);
+	fseek(bin, file_offset, SEEK_SET);
+	read_4_bytes(bin, &result);
+	fseek(bin, position, SEEK_SET);
+	return result;
 }
 
