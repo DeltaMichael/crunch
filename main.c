@@ -3,16 +3,11 @@
 #include "machine.h"
 
 int main(int argc, char** argv) {
+	if(argc != 2) {
+		printf("Usage: crunch path/to/binary/file");
+	}
 	MACHINE* machine = machine_init();
-	machine_exec(machine, "./out");
-	// STACK* stack = stack_init();
-	// stack_push(stack, 0xAABBCCDD);
-	// stack_push(stack, 0xFFFFFFFF);
-	// stack_pop32(stack);
-	// stack_push(stack, 0xCAFEBABE);
-	// stack_print(stack);
-	// printf("%#08x\n", stack_pop32(stack));
-	// printf("%#08x\n", stack_pop32(stack));
+	machine_exec(machine, argv[1]);
 	return 0;
 }
 

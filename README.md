@@ -1,5 +1,19 @@
 # Crunch
 
+## How to run
+
+```
+make
+crunch /path/to/binary/file
+```
+
+Run tests
+
+```
+cd test
+./run_all.py
+```
+
 ## Binary file format
 
 OPCODE - 8 bits
