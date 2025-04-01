@@ -1,2 +1,5 @@
 crunch
-*.o
+assembler/crasm
+assembler/lex.yy.c
+assembler/*.tab.*
+**/*.o

@@ -5,18 +5,22 @@
 
 enum OPCODE {
 	ADD = 2,
-	SUB = 3,
-	DIV = 4,
-	MUL = 5,
-	PUSH = 6,
-	POP = 7,
-	PRINT = 8,
+	SUB,
+	DIV,
+	MUL,
+	PUSH,
+	POP,
+	PRINT,
 	READ,
 	JZ,
 	JNZ,
 	JLZ,
 	JGZ,
-	JMP
+	JMP,
+	ADDR,
+	SUBR,
+	DIVR,
+	MULR,
 };
 
 typedef struct {
