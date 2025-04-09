@@ -50,9 +50,12 @@ We introduce an addressing offset. Since we're dealing with 16-bit addresses, th
 and an op-code. This requires that we split the 16-bit address space in two. Our offset becomes 2^8 + 2^15 = 0x8100, which is our offset. Instruction op codes can vary from 0x00 to 0x80
 and there is no danger of an opcode overlapping with an address. Addresses range from 0x8100 upward.
 
-For instructions like goto and conditional jumps, we're dealing with offsets to the program counter. This can be handled by passing the offset directly.
+The address space can be further split between stack offsets, stack addresses and data section addresses. We also need some dedicated space for registers.
 
-TODO: Think about handling the data addressing, e.g. literals in the data section. This might require splitting the address space again.
+0x8100 - 0x81FF - registers. This allows for 255 registers
+0x8200 - 0x9000 - stack offsets. This allows us to offset the stack pointer by 3584 bytes
+0x9000 - 0xE040 - stack addresses. This sets the stack size at 20544 bytes
+0xE041 - 0XFFFF - data addresses. 8192 bytes
 
 ## Architecture
 

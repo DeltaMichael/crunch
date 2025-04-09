@@ -58,32 +58,24 @@ void machine_exec(MACHINE* machine, const char* program) {
 
 	// read magic number
 	read_4_bytes(bin, &magic);
-	// printf("MAGIC: %08X\n", magic);
 	assert(magic == 0xFEFAFAFC);
 
 	// read data section length
 	read_2_bytes(bin, &data_length);
-	// printf("DATA_LENGTH: %04X\n", data_length);
 
-	// printf("DATA: \n");
 	while(data_length > 0) {
 		data_length--;
 		read_1_byte(bin, &byte);
-		// printf("%02X ", byte);
 	}
-	// printf("\n");
 	// read program section length
 	read_2_bytes(bin, &program_length);
-	// printf("PROGRAM_LENGTH: %04X\n", program_length);
 
 	INSTRUCTION* instr = malloc(sizeof(INSTRUCTION));
 
 	while(program_length > 0) {
 		program_length -= machine_read_instruction(machine, bin, instr);
 		machine_exec_instr(machine, bin, instr);
-		// printf("SP: %d\n", *machine->sp);
 	}
-	// printf("\n");
 }
 
 int machine_read_instruction(MACHINE* machine, FILE* bin, INSTRUCTION* instr) {
