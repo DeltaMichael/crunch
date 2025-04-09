@@ -3,7 +3,7 @@
     #include <string.h>
     #include <stdlib.h>
     #include <stdint.h>
-
+	FILE* output_file;
 %}
 
 %code requires {
@@ -41,7 +41,17 @@
 %%
 
 instrlist:
-       | instrlist instr EOL {printf("%02X %04X %04X\n", $2->opcode, $2->address1, $2->address2);}
+       | instrlist instr EOL {
+	   		if($2->opcode) {
+				fwrite(&$2->opcode, sizeof(uint8_t), 1, output_file);
+			}
+			if($2->address1) {
+				fwrite(&$2->address1, sizeof(uint16_t), 1, output_file);
+			}
+			if($2->address2) {
+				fwrite(&$2->address2, sizeof(uint16_t), 1, output_file);
+			}
+		}
        ;
 
 instr: OPCODE offset COMMA offset { INSTRUCTION* out = calloc(1, sizeof(INSTRUCTION)); out->opcode = $1; out->address1 = $2; out-> address2 = $4; $$ = out; }
@@ -60,9 +70,9 @@ offset: DOLLAR OP SP MINUS LITERAL CP { $$ = $5; }
 	  | DOLLAR OP SP CP { $$ = 0; }
 	  ;
 
-register: RES { $$ = 0x0000; }
-		| ACC { $$ = 0x0001; }
-		| FLAGS { $$ = 0x0002; }
+register: RES { $$ = 0x8201; }
+		| ACC { $$ = 0x8202; }
+		| FLAGS { $$ = 0x8203; }
 		;
 %%
 
@@ -71,6 +81,10 @@ int main(int argc, char** argv) {
 	extern FILE* yyin;
 	if(argc > 1) {
     	if(!(yyin = fopen(argv[1], "r"))) {
+      		perror(argv[1]);
+      		return (1);
+    	}
+    	if(!(output_file = fopen("out.bin", "w"))) {
       		perror(argv[1]);
       		return (1);
     	}

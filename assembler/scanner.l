@@ -1,3 +1,5 @@
+/* %option nodefault */
+
 %{
 #include "parser.tab.h"
 %}

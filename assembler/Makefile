@@ -1,4 +1,4 @@
-FLAGS = -g -lc -Wall -Wextra -fsanitize=address
+FLAGS = -g -lc -Wall -Wextra # -fsanitize=address
 # O_FILES = hmap.o util.o sbuilder.o arglist.o interpreter.o
 0_FILES =
 crasm: scanner.l parser.y $(O_FILES)
