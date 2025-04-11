@@ -25,14 +25,8 @@ CODE LENGTH - 16 bits
 TRAILING ZERO - 8 bits
 
 ```
-<MAGIC><DATA SECTION LENGTH><DATA SECTION><CODE LENGTH><CODE><TRAILING ZERO>
+<MAGIC><DATA SECTION OFFSET><CODE><DATA SECTION LENGTH><DATA SECTION><TRAILING ZERO>
 
-<DATA>
-<VALUE>
-<VALUE>
-...
-<VALUE>
-<DATA>
 
 <CODE>
 <OPCODE><ADDRESS1><ADDRESS2>
@@ -41,6 +35,14 @@ TRAILING ZERO - 8 bits
 ...
 <OPCODE><ADDRESS1><ADDRESS2>
 <CODE>
+
+<DATA>
+<VALUE>
+<VALUE>
+...
+<VALUE>
+<DATA>
+
 ```
 
 One issue with this format is that you have to differentiate between instructions and address somehow. Since one and the same instruction can have a
