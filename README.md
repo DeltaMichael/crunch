@@ -78,10 +78,12 @@ all numbers are 32 bits wide. This may change in the future.
 
 Instructions can have zero, one or two arguments. The same instruction can have a variable amount of arguments, e.g.
 
+```
 ADD - pops two values off the stack, adds them and pushes the result on the stack
 ADD $(SP - 4) - add value at address SP - 4 to ACC
 ADD ACC, $(SP - 4) - same as above
 ADD $(SP - 4), $(SP - 8) - add value at address SP - 8 to value in address SP - 4 and store the value in at address SP - 4
+```
 
 Instructions
 ```
