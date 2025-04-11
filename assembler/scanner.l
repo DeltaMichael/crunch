@@ -2,6 +2,10 @@
 
 %{
 #include "parser.tab.h"
+#include "hmap.h"
+
+HMAP* symtab;
+uint16_t data_address = 0xE041;
 %}
 
 %%
@@ -31,5 +35,14 @@ FLAGS { return FLAGS; }
 "$" { return DOLLAR; }
 \n          { return EOL; }
 [ \t]       { /* ignore whitespace*/ }
-[0-9]+  { yylval.value = atoi(yytext); return LITERAL; }
+[0-9]+  {
+			yylval.str_val = strdup(yytext);
+			if(!hmap_contains(symtab, yytext)) {
+				char addr[10];
+				sprintf(addr, "%d", data_address);
+				hmap_insert(symtab, yytext, addr);
+				data_address += 4;
+			}
+			return LITERAL;
+		}
 %%
