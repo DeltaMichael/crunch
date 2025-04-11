@@ -54,10 +54,10 @@ and there is no danger of an opcode overlapping with an address. Addresses range
 
 The address space can be further split between stack offsets, stack addresses and data section addresses. We also need some dedicated space for registers.
 
-0x8100 - 0x81FF - registers. This allows for 255 registers
-0x8200 - 0x9000 - stack offsets. This allows us to offset the stack pointer by 3584 bytes
-0x9000 - 0xE040 - stack addresses. This sets the stack size at 20544 bytes
-0xE041 - 0XFFFF - data addresses. 8192 bytes
+0x8100 - 0x81FF - registers. This allows for 255 registers  
+0x8200 - 0x9000 - stack offsets. This allows us to offset the stack pointer by 3584 bytes  
+0x9000 - 0xE040 - stack addresses. This sets the stack size at 20544 bytes  
+0xE041 - 0XFFFF - data addresses. 8192 bytes  
 
 ## Architecture
 
