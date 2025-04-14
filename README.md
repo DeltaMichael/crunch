@@ -16,13 +16,13 @@ cd test
 
 ## Binary file format
 
-OPCODE - 8 bits
-ADDRESS - 16 bits
-VALUE - 32 bits
-MAGIC - 32 bits - FEFA FAFC
-DATA SECTIN LENGTH - 16 bits
-CODE LENGTH - 16 bits
-TRAILING ZERO - 8 bits
+OPCODE - 8 bits  
+ADDRESS - 16 bits  
+VALUE - 32 bits  
+MAGIC - 32 bits - FEFA FAFC  
+DATA SECTIN LENGTH - 16 bits  
+CODE LENGTH - 16 bits  
+TRAILING ZERO - 8 bits  
 
 ```
 <MAGIC><DATA SECTION OFFSET><CODE><DATA SECTION LENGTH><DATA SECTION><TRAILING ZERO>
