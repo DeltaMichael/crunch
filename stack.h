@@ -3,7 +3,7 @@
 
 #define STACK_OFFSET 0x8100
 #define STACK_SIZE 0xE040
-#define DATA_OFFSET 0xE040
+#define DATA_OFFSET 0xE041
 #define DATA_FILE_OFFSET 0x06
 
 #include <stdint.h>

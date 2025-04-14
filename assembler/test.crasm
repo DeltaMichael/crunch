@@ -1,3 +1,4 @@
-ADD $(SP - 4), $(SP - 8)
 PUSH 9000
-POP
+PUSH 8000
+ADD
+PRINT

@@ -49,10 +49,12 @@ void machine_free(MACHINE* machine) {
 	machine = NULL;
 }
 
+
+
 void machine_exec(MACHINE* machine, const char* program) {
 	FILE* bin = fopen(program, "rb");
 	uint32_t magic;
-	uint16_t data_length;
+	uint16_t data_offset;
 	uint16_t program_length;
 	uint8_t byte;
 
@@ -60,15 +62,11 @@ void machine_exec(MACHINE* machine, const char* program) {
 	read_4_bytes(bin, &magic);
 	assert(magic == 0xFEFAFAFC);
 
-	// read data section length
-	read_2_bytes(bin, &data_length);
+	// read data offset
+	read_2_bytes(bin, &data_offset);
+	machine->data_offset = data_offset;
 
-	while(data_length > 0) {
-		data_length--;
-		read_1_byte(bin, &byte);
-	}
-	// read program section length
-	read_2_bytes(bin, &program_length);
+	program_length = data_offset - 8;
 
 	INSTRUCTION* instr = malloc(sizeof(INSTRUCTION));
 
@@ -114,7 +112,7 @@ void machine_exec_instr(MACHINE* machine, FILE* bin, INSTRUCTION* instr) {
 	switch (instr->opcode) {
 		case PUSH:
 			if(instr->address1 != 0 && instr->address1 >= DATA_OFFSET) {
-				uint32_t data = machine_read_uint32_data(machine, bin, instr->address1);
+				uint32_t data = machine_read_data_uint32(machine, bin, instr->address1);
 				// printf("NUM: %08X\n", data);
 				stack_push(machine->stack, data);
 			} else if (instr->address1 != 0 && instr->address1 >= STACK_OFFSET) {
@@ -135,13 +133,13 @@ void machine_exec_instr(MACHINE* machine, FILE* bin, INSTRUCTION* instr) {
 	}
 }
 
-uint32_t machine_read_uint32_data(MACHINE* machine, FILE* bin, uint16_t address) {
-	uint32_t result = 0;
-	uint16_t file_offset = address - DATA_OFFSET + DATA_FILE_OFFSET;
-	long position = ftell(bin);
-	fseek(bin, file_offset, SEEK_SET);
+uint32_t machine_read_data_uint32(MACHINE* machine, FILE* bin, uint16_t address) {
+	uint32_t result;
+	long curr = ftell(bin);
+	long offset = machine->data_offset + address - DATA_OFFSET;
+	fseek(bin, offset, SEEK_SET);
 	read_4_bytes(bin, &result);
-	fseek(bin, position, SEEK_SET);
+	fseek(bin, curr, SEEK_SET);
 	return result;
 }
 

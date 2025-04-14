@@ -1,6 +1,6 @@
 FLAGS = -g -lc -Wall -Wextra # -fsanitize=address
 # O_FILES = hmap.o util.o sbuilder.o arglist.o interpreter.o
-O_FILES = hmap.o
+O_FILES = hmap.o util.o
 
 
 crasm: scanner.l parser.y $(O_FILES)
@@ -9,6 +9,7 @@ crasm: scanner.l parser.y $(O_FILES)
 	cc $(FLAGS) -o crasm parser.tab.c lex.yy.c $(O_FILES) -lfl
 
 hmap.o: hmap.h
+util.o: util.h
 
 .PHONY: clean
 clean:

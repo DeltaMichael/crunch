@@ -4,6 +4,7 @@
     #include <stdlib.h>
     #include <stdint.h>
 	#include "hmap.h"
+	#include "util.h"
 	FILE* output_file;
 	uint16_t instr_length;
 	extern HMAP* symtab;
@@ -50,10 +51,10 @@ instrlist:
 				fwrite(&$2->opcode, sizeof(uint8_t), 1, output_file);
 			}
 			if($2->address1) {
-				fwrite(&$2->address1, sizeof(uint16_t), 1, output_file);
+				fwrite_u16(output_file, $2->address1);
 			}
 			if($2->address2) {
-				fwrite(&$2->address2, sizeof(uint16_t), 1, output_file);
+				fwrite_u16(output_file, $2->address2);
 			}
 		}
        ;
@@ -160,31 +161,33 @@ int main(int argc, char** argv) {
     	}
   	}
 	uint32_t magic = 0xFEFAFAFC;
-	uint16_t data_offset = 0x0000;
+	uint16_t data_length = 0x0000;
+
+	int n = 1;
+	// if little endian
 
 	// write magic bytes
-	fwrite(&magic, sizeof(uint32_t), 1, output_file);
+	fwrite_u32(output_file, magic);
 
 	// write placeholder for data offset
 	long do_p = ftell(output_file);
-	fwrite(&data_offset, sizeof(uint16_t), 1, output_file);
+	fwrite_u16(output_file, data_length);
     yyparse();
 
 	// write the data offset
 	fseek(output_file, do_p, SEEK_SET);
-	printf("%d\n", instr_length);
-	fwrite(&instr_length, sizeof(uint16_t), 1, output_file);
+	fwrite_u16(output_file, instr_length + 8);
 
 	// write the data length
 	fseek(output_file, 0, SEEK_END);
-	data_offset += symtab->inserted * 4;
-	fwrite(&data_offset, sizeof(uint16_t), 1, output_file);
+	data_length += symtab->inserted * 4;
+	fwrite_u16(output_file, data_length);
 
 	// save beginning of data segment and fill with zeroes
 	long dp = ftell(output_file);
 	uint32_t zero = 0;
 	for(size_t i = 0; i < symtab->inserted; i++) {
-		fwrite(&zero, sizeof(uint32_t), 1, output_file);
+		fwrite_u32(output_file, 0);
 	}
 
 	for(size_t i = 0; i < symtab->size; i++) {
@@ -193,7 +196,7 @@ int main(int argc, char** argv) {
 			long address = atoi(entry->value) - 0xE041;
 			uint32_t key = atoi(entry->key);
 			fseek(output_file, dp + address, SEEK_SET);
-			fwrite(&key, sizeof(uint32_t), 1, output_file);
+			fwrite_u32(output_file, key);
 		}
 	}
 
