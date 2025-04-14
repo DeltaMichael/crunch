@@ -155,10 +155,15 @@ int main(int argc, char** argv) {
       		perror(argv[1]);
       		return (1);
     	}
-    	if(!(output_file = fopen("out.bin", "w"))) {
+
+		char* last_dot = strstr(argv[1], ".crasm");
+		char* output_path = strndup(argv[1], strlen(argv[1]) - strlen(last_dot));
+    	if(!(output_file = fopen(output_path, "w"))) {
       		perror(argv[1]);
+			free(output_path);
       		return (1);
     	}
+		free(output_path);
   	}
 	uint32_t magic = 0xFEFAFAFC;
 	uint16_t data_length = 0x0000;
